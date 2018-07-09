@@ -38,10 +38,10 @@ class Config {
     // DATABASE SETTINGS
     // ------------------------------------------------------------------------
 
-    const DB_HOST       = 'localhost';
-    const DB_NAME       = 'easyblue2';
-    const DB_USERNAME   = 'root';
-    const DB_PASSWORD   = 'M@!tre';
+    const DB_HOST       = '';
+    const DB_NAME       = '';
+    const DB_USERNAME   = '';
+    const DB_PASSWORD   = '';
 
     // ------------------------------------------------------------------------
     // GOOGLE CALENDAR SYNC
