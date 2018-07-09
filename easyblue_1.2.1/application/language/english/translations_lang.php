@@ -1,5 +1,8 @@
 <?php
 // English
+$lang['table_of_appointments'] = 'Table showing the number of appointments made per month depending on their categories on year-on-year'; 
+$lang['export_list_of_appointments'] = 'Export list of appointments';
+$lang['statistics'] = 'Statistics';
 $lang['page_title'] = 'Book Appointment With';
 $lang['step_one_title'] = 'Select Service & Provider';
 $lang['select_service'] = 'Select Service';
