@@ -123,7 +123,8 @@
                 currency: $('#service-currency').val(),
                 description: $('#service-description').val(),
                 availabilities_type: $('#service-availabilities-type').val(),
-                attendants_number: $('#service-attendants-number').val()
+                attendants_number: $('#service-attendants-number').val(),
+                hidden : $('#service-hidden').val()
             };
 
             if ($('#service-category').val() !== 'null') {
@@ -160,21 +161,22 @@
         /**
          * Event: Delete Service Button "Click"
          */
-        $('#delete-service').click(function() {
+        $('#delete-service').click(function () {
             var serviceId = $('#service-id').val();
-            var messageBtns = {};
+            var button = [{
+                    text: EALang['delete'],
+                    click: function () {
+                        instance.delete(serviceId);
+                        $('#message_box').dialog('close');
+                    }},
+			{	
+                    text: EALang['cancel'],
+                    click: function () {
+                        $('#message_box').dialog('close');
+                    }}];
 
-            messageBtns[EALang['delete']] = function() {
-                instance.delete(serviceId);
-                $('#message_box').dialog('close');
-            };
-
-            messageBtns[EALang['cancel']] = function() {
-                $('#message_box').dialog('close');
-            };
-
-            GeneralFunctions.displayMessageBox(EALang['delete_service'],
-                    EALang['delete_record_prompt'], messageBtns);
+            GeneralFunctions.displayMessageBox(EALang.delete_service,
+                EALang.delete_record_prompt, button);
         });
     };
 

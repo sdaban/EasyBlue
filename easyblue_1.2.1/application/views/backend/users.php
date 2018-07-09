@@ -163,9 +163,9 @@
                             <label for="admin-notes"><?php echo $this->lang->line('notes'); ?></label>
                             <textarea id="admin-notes" class="form-control" rows="3"></textarea>
                         </div>
-						
+
 						<input id="client-notifications" type="hidden" value="0">
-						
+
                     </div>
                     <div class="admin-settings col-md-6">
                         <div class="form-group">

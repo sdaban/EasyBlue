@@ -49,10 +49,13 @@ window.GeneralFunctions = window.GeneralFunctions || {};
         }
 
         if (messageButtons == undefined) {
-            messageButtons = {};
-            messageButtons[EALang['close']] = function() {
-                $('#message_box').dialog('close');
-            };
+	    messageButtons = [
+		{
+	    		text: EALang.close,	
+            		click: function () {
+                        $('#message_box').dialog('close');
+		}
+            }];
         }
 
         // Destroy previous dialog instances.

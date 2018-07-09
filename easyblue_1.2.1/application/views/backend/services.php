@@ -119,8 +119,17 @@
                     <select id="service-category" class="form-control"></select>
                 </div>
 
+    		<!-- Aditional function to hide a service from the public if you want to put appointments in the application as user -->
                 <div class="form-group">
-                    <label for="service-availabilities-type"><?php echo $this->lang->line('availabilities_type'); ?></label>
+                	<label for="service-hidden"><?php echo $this->lang->line('hidden'); ?></label>
+                	<select id="service-hidden" class="form-control">
+                		<option value="1" ><?php echo $this->lang->line('yes'); ?></option>
+							<option value="0"><?php echo $this->lang->line('no'); ?></option>
+                	</select>
+                </div>
+
+                <div class="form-group">
+                    <label style="background-color : white;" for="service-availabilities-type"><?php echo $this->lang->line('availabilities_type'); ?></label>
                     <select id="service-availabilities-type" class="form-control">
                         <option value="<?php echo AVAILABILITIES_TYPE_FLEXIBLE; ?>">
                             <?php echo $this->lang->line('flexible'); ?>
@@ -128,7 +137,7 @@
                         <option value="<?php echo AVAILABILITIES_TYPE_FIXED; ?>">
                             <?php echo $this->lang->line('fixed'); ?>
                         </option>
-						
+
 						<!--Aditional availabilities types Craig Tucker start -->
                         <option value="<?php echo AVAILABILITIES_TYPE_Q30; ?>">
                             <?php echo $this->lang->line('Q30'); ?>
