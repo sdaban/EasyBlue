@@ -1,5 +1,8 @@
 <?php
 // English
+$lang['table_of_appointments'] = 'Table showing the number of appointments made per month depending on their categories on year-on-year'; 
+$lang['export_list_of_appointments'] = 'Export list of appointments';
+$lang['statistics'] = 'Statistics';
 $lang['page_title'] = 'Book Appointment With';
 $lang['step_one_title'] = 'Select Service & Provider';
 $lang['select_service'] = 'Select Service';
@@ -8,6 +11,7 @@ $lang['duration'] = 'Duration';
 $lang['minutes'] = 'Minutes';
 $lang['price'] = 'Price';
 $lang['back'] = 'Back';
+$lang['hidden'] = 'Hide to public';
 $lang['step_two_title'] = 'Select Date And Time';
 $lang['no_available_hours'] = 'There are no available appointment hours for the selected date. Please choose another date.';
 $lang['appointment_hour_missing'] = 'Please select an appointment hour before continuing!';
@@ -19,6 +23,7 @@ $lang['phone_number'] = 'Phone Number';
 $lang['address'] = 'Address';
 $lang['city'] = 'City';
 $lang['zip_code'] = 'Zip Code';
+$lang['total'] = 'Total';
 $lang['notes'] = 'Notes';
 $lang['fields_are_required'] = 'Fields with * are required!';
 $lang['step_four_title'] = 'Confirm Appointment';

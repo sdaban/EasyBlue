@@ -81,7 +81,8 @@ class Services_Model extends CI_Model {
         $num_rows = $this->db->get_where('ea_services', array(
             'name' => $service['name'],
             'duration' => $service['duration'],
-            'price' => $service['price']
+            'price' => $service['price'],
+            'hidden' => $service['hidden']
         ))->num_rows();
 
         return ($num_rows > 0) ? TRUE : FALSE;
@@ -134,7 +135,12 @@ class Services_Model extends CI_Model {
                 throw new Exception('Service price is not numeric.');
             }
         }
-
+		
+			if ($service['hidden'] !== NULL) {
+            if (!is_numeric($service['hidden'])) {
+                throw new Exception('Service price is not numeric.');
+            }
+        }
         // Availabilities type must have the correct value.
 		
 		// Availabilities modifications Craig Tucker start 

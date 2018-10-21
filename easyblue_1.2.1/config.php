@@ -30,8 +30,8 @@ class Config {
     // GENERAL SETTINGS
     // ------------------------------------------------------------------------
 
-    const BASE_URL      = 'http://url-to-easyappointments-directory';
-    const LANGUAGE      = 'english';
+    const BASE_URL      = 'http://localhost/easyblue_1.2.1';
+    const LANGUAGE      = 'french';
     const DEBUG_MODE    = FALSE;
 
     // ------------------------------------------------------------------------

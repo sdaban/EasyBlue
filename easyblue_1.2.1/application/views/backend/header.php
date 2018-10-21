@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <?php
-	$this->load->model('settings_model');			
+	$this->load->model('settings_model');
 	$theme_color = $this->settings_model->get_setting('theme_color');
 ?>
 <html lang="en">
@@ -82,8 +82,8 @@
                 <img src="<?php echo $base_url; ?>/assets/img/logo.png">
                 <span><?php echo $company_name; ?></span>
             </div>
-            
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header-menu" 
+
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header-menu"
                     aria-expanded="false" aria-controls="navbar">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
@@ -91,7 +91,7 @@
                 <span class="icon-bar"></span>
             </button>
         </div>
-        
+
 
         <div id="header-menu" class="collapse navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
@@ -117,6 +117,7 @@
                     </a>
                 </li>
 
+ 
                 <?php // SERVICES MENU ITEM
                       // ------------------------------------------------------ ?>
                 <?php $hidden = ($privileges[PRIV_SERVICES]['view'] == TRUE) ? '' : 'hidden'; ?>
@@ -150,6 +151,17 @@
                         <?php echo $this->lang->line('settings'); ?>
                     </a>
                 </li>
+
+								<?php $hidden = ($privileges[PRIV_SYSTEM_SETTINGS]['view'] == TRUE
+                        || $privileges[PRIV_USER_SETTINGS]['view'] == TRUE) ? '' : 'hidden'; ?>
+                <?php $active = ($active_menu == PRIV_SYSTEM_SETTINGS) ? 'active' : ''; ?>
+                <li class="<?php echo $active . $hidden; ?>">
+                    <a href="<?php echo site_url('backend/statistics'); ?>" class="menu-item"
+                            title="<?php echo $this->lang->line('statistics'); ?>">
+                        <?php echo $this->lang->line('statistics'); ?>
+                    </a>
+                </li>
+
 
                 <?php // LOGOUT MENU ITEM
                       // ------------------------------------------------------ ?>

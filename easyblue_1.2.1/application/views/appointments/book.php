@@ -12,29 +12,29 @@
 		 headTag = document.getElementsByTagName("head")[0].innerHTML;
 		 var frameCSS = headTag + '<style type="text/css">#main .wrapper {height: 0!important; vertical-align: top!important;}</style>';
 		 document.getElementsByTagName('head')[0].innerHTML = frameCSS;
-		 
-	</script> <?php	
+
+	</script> <?php
 	get_header();
 	}
-	
-	$this->load->model('settings_model');			
+
+	$this->load->model('settings_model');
 	$theme_color = $this->settings_model->get_setting('theme_color');
- ?> 
- 
+ ?>
+
 	<style>
-	
+
 	.ui-datepicker{
 		opacity:.2;
 	}
-		
+
 	#selectprovider {
 		display: none;
-	}	
-	
-	
-	</style> 
+	}
+
+
+	</style>
  <!-- WP Mod 1 Craig Tucker end -->
- 
+
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -45,7 +45,7 @@
     <?php
         // ------------------------------------------------------------
         // INCLUDE CSS FILES
-        // ------------------------------------------------------------ 
+        // ------------------------------------------------------------
 	?>
 	<!-- CSS mod Craig Tucker start-->
 	<link
@@ -122,7 +122,7 @@
                     // CANCEL APPOINTMENT BUTTON
                     // ------------------------------------------------------
                     if ($manage_mode === TRUE) {
-						
+
 				// Alex's Original Delete Button start
                         // echo '
                             // <div id="cancel-appointment-frame" class="row">
@@ -142,14 +142,14 @@
                                 // </div>
                             // </div>';
 					//Alexe's Original Delete Button end
-						
-					//New, Edit, Delete mod Craig Tucker Start	
+
+					//New, Edit, Delete mod Craig Tucker Start
 					//Tucker $appt_date= date('l, F j, Y, g:i a',strtotime($appointment_data['start_datetime']));
 					//Time format-- Military 'H:i' AM/PM 'h:i a'
-					$this->load->model('settings_model');			
+					$this->load->model('settings_model');
 					$time_format = $this->settings_model->get_setting('time_format');
 					$date_format = $this->settings_model->get_setting('date_format');
-		
+
 						switch($date_format) {
 							case 'DMY':
 								$dateview='d/m/Y';
@@ -163,8 +163,8 @@
 							default:
 								$dateview='Y/m/d';
 								break;
-						}			
-				
+						}
+
 						switch($time_format) {
 							case '24HR':
 								$timeview=' H:i';
@@ -175,33 +175,33 @@
 							default:
 								$timeview=' H:i';
 								break;
-						}			
-			
+						}
+
 					$longDay = $this->lang->line(strtolower(date('l',strtotime($appointment_data['start_datetime']))));
 					$date_field = date($dateview,strtotime($appointment_data['start_datetime']));
 					$time_field = date($timeview,strtotime($appointment_data['start_datetime']));
-					if ($time_format == '24HR') {				
+					if ($time_format == '24HR') {
 						$appt_date = $date_field . $time_field;
 					} else {
 						$appt_date = $longDay . ', ' . $date_field . $time_field;
-					}			
-					
+					}
+
                         echo '
-						
-						
+
+
 							<div id="wizard-frame-0" class="wizard-frame" >
 								<h3>' .
                                          $this->lang->line('what_to_do') .
                                 '<h3>
 								<div button id="selectNew" class="btn btn-buttonanew btn-primary" value=0 data-step_index="0" class="col-md-6">'. $this->lang->line('new_apt') .'<i class="icon-forward icon-white"></i></button>
 								</div>
-								<br><br>									
-								<div button type="button" id="button-next-0" class="btn button-next btn-primary" 
+								<br><br>
+								<div button type="button" id="button-next-0" class="btn button-next btn-primary"
 								data-step_index="0" class="col-md-6">'. $this->lang->line('change_apt') .'<i class="icon-forward icon-white"></i></button>
-								</div> 
+								</div>
 								<br><strong><h5><div id="appointment-service"></div></h5></strong>
 								<h6>'.$appt_date.'</h6><br>
-								
+
 								<form id="cancel-appointment-form" method="post"
 										action="' . $this->config->item('base_url')
 										. '/index.php/appointments/cancel/' . $appointment_data['hash'] . '" >
@@ -210,14 +210,14 @@
 									<h6>' . $this->lang->line('write_appointment_removal_reason') . '</h6>
 									<textarea name="cancel_reason" required></textarea>
 								</form>
-							</div>								
-						
-						
+							</div>
+
+
                             <div id="cancel-appointment-frame" class="row">
                                 <div class="col-xs-12 col-sm-9">
 									<div align="center" style="margin-left: 30px;">
 										<h6>'.$this->lang->line('change_apt').'<br>'.$appt_date.'<h6>
-									</div> 
+									</div>
                                 </div>
 								<div >
                                     <form id="update-appointment-form" method="post"
@@ -229,8 +229,8 @@
                                     </form>
                                 </div>
                             </div>';
-					//New, Edit, Delete mod Craig Tucker End 		
-						
+					//New, Edit, Delete mod Craig Tucker End
+
                     }
                 ?>
 
@@ -277,9 +277,10 @@
 
                                         if ($has_category) {
                                             $grouped_services = array();
-
+															
+															/* if the service is hidden to public then we didn't put in the select*/
                                             foreach($available_services as $service) {
-                                                if ($service['category_id'] != NULL) {
+                                                if ($service['category_id'] != NULL && $service['hidden']==0) {
                                                     if (!isset($grouped_services[$service['category_name']])) {
                                                         $grouped_services[$service['category_name']] = array();
                                                     }
@@ -304,7 +305,7 @@
                                                 if (count($group) > 0) {
                                                     echo '<optgroup label="' . $group_label . '">';
                                                     foreach($group as $service) {
-                                                        echo 
+                                                        echo
 														'<option value="' . $service['id'] . '">'
                                                             . $service['name'] . '</option>';
                                                     }
@@ -313,10 +314,12 @@
                                             }
                                         }  else {
                                             foreach($available_services as $service) {
+
                                                 echo '<option value="' . $service['id'] . '">'
                                                             . $service['name'] . '</option>';
                                             }
                                         }
+
                                     ?>
                                 </select>
                             </div>
@@ -329,11 +332,11 @@
                                 <select id="select-provider" class="col-md-4 form-control"></select>
                             </div>
 
-                            <div id="service-description" style="display:none;"></div>
+                            <div id="description" > <?php echo $service['description']; ?> </div>
                         </div>
                     </div>
                     <div class="command-buttons">
-                        <button type="button" id="button-next-1" class="btn button-next btn-primary"  
+                        <button type="button" id="button-next-1" class="btn button-next btn-primary"
                                 data-step_index="1">
                             <?php echo $this->lang->line('next'); ?>
                             <span class="glyphicon glyphicon-forward"></span>
@@ -367,7 +370,7 @@
 								</div>
                             </div>
 							<!-- Craig Tucker mod end-->
-						
+
 							<!--Waiting List Button start
 							Craig Tucker Modification craigtuckerlcsw@gmail.com-->
                             <div class="col-md-6">
@@ -379,7 +382,7 @@
 									</button><br><br>
 									 <?php // Available hours are going to be fetched via ajax call. ?>
                                 <div align="center" id="available-hours"></div>
-								</div>                            
+								</div>
 							</div>
 							<!--Waiting List Button end-->
                             <div class="col-xs-12 col-sm-6"></div>
@@ -417,15 +420,15 @@
 									<label for="first-name" class="control-label"><?php echo $this->lang->line('first_name'); ?> *</label>
                                     <input type="text" id="first-name" class="required form-control" maxlength="100" />
 									Alexe's code end -->
-									
+
 									<!-- WP Mod 2 Craig Tucker start -->
-									<input type="hidden" id="wp-id" value="<?php if (Config::WP_HEADER_FOOTER== TRUE) { echo $current_user->ID;}?>" /> 
-									<input type="hidden" id="lang" value="<?php echo $this->session->userdata('language');?>" /> 
+									<input type="hidden" id="wp-id" value="<?php if (Config::WP_HEADER_FOOTER== TRUE) { echo $current_user->ID;}?>" />
+									<input type="hidden" id="lang" value="<?php echo $this->session->userdata('language');?>" />
                                     <label for="first-name" class="control-label"><?php echo $this->lang->line('first_name'); ?> *</label>
-                                    <input type="text" id="first-name" class="required form-control" maxlength="100" 
+                                    <input type="text" id="first-name" class="required form-control" maxlength="100"
 									value="<?php if (Config::WP_HEADER_FOOTER== TRUE) { echo $current_user->user_firstname;} ?>" />
 									<!-- WP Mod 2 Craig Tucker end -->
-									
+
                                 </div>
                                 <div class="form-group">
                                     <label for="last-name" class="control-label"><?php echo $this->lang->line('last_name'); ?> *</label>
@@ -445,7 +448,7 @@
 									Alexe's code end -->
 
 									<!-- WP Mod 4 Craig Tucker start -->
-                                    <input type="text" id="email" class="required form-control" maxlength="250" 
+                                    <input type="text" id="email" class="required form-control" maxlength="250"
 									value="<?php if (Config::WP_HEADER_FOOTER== TRUE) { echo $current_user->user_email; } ?>" />
 									<!-- WP Mod 4 Craig Tucker end -->
 								</div>
@@ -457,35 +460,10 @@
 									Alexe's code end -->
 
 									<!-- WP Mod 5 Craig Tucker start -->
-                                    <input type="text" id="phone-number" class="required form-control" maxlength="60"  
+                                    <input type="text" id="phone-number" class="required form-control" maxlength="60"
 									value="<?php if (Config::WP_HEADER_FOOTER== TRUE) { echo $current_user->phone_number; } ?>" />
 									<!-- WP Mod 5 Craig Tucker end -->
                                 </div>
-								
-								<!-- Craig Tucker cell carrier mod start -->
-								<div class="form-group"> 
-									<label for="cell-carrier">
-											<strong><?php echo $this->lang->line('cell_carrier'); ?></strong>
-									</label>
-									<select id="cell-carrier" class="col-md-4 form-control">
-											<option value=""><?php echo $this->lang->line('select'); ?></option>	 
-											<?php 
-										   foreach($cell_services as $carrier) {
-											//WP integration code start    
-										   	if (Config::WP_HEADER_FOOTER== TRUE) {
-												if ($current_user->cell_carrier == $carrier['id']) { 
-												echo '<option selected value="' . $carrier['id'] . '">' 
-															. $carrier['cellco'] . '</option>';
-											    } 
-										    }
-											//WP integration code end
-											echo '<option value="' . $carrier['id'] . '">' 
-														. $carrier['cellco'] . '</option>';
-											}
-										?>
-									</select>
-								</div> 
-								<!-- Craig Tucker cell carrier mod end -->
 
 							</div>
 
@@ -521,13 +499,13 @@
 												<li style= "margin-left:30px; margin-right:30px;"><?php echo $this->lang->line('conf_bullet1'); ?></li><br>
 												<li style= "margin-left:30px; margin-right:30px;"><?php echo $this->lang->line('conf_bullet2'); ?></li><br>
 												<li style= "margin-left:30px; margin-right:30px;"><?php echo $this->lang->line('conf_bullet3'); ?></li><br>
-											
+
 										<p style= "margin-left:30px; margin-right:30px;"><?php echo $this->lang->line('conf_text2'); ?></p>
 										</div>
 										<div class="modal-body">
 			                                <div class="form-group">
-											
-												<label for="conf-notice" class="control-label"><strong><?php echo $this->lang->line('notice_auth'); ?> - 
+
+												<label for="conf-notice" class="control-label"><strong><?php echo $this->lang->line('notice_auth'); ?> -
 													<font color="red"><?php echo $this->lang->line('select'); ?></font></strong></label>
 												<select id="conf-notice" class="form-control" ?>
 													<option value="1" <?php if ((Config::WP_HEADER_FOOTER== TRUE) && ($current_user->notification == 1)):?> selected <?php endif; ?> >
@@ -535,13 +513,13 @@
 													<option value="0" <?php if ((Config::WP_HEADER_FOOTER== TRUE) && ($current_user->notification == 0)):?> selected <?php endif; ?> >
 													<?php echo $this->lang->line('notice_auth_n'); ?></option>
 												</select><br><br>
-											</div>	
+											</div>
 										</div>
 										<div class="modal-footer">
 											<button id="cancel-authorization" class="btn" data-dismiss="modal">
 												<?php echo $this->lang->line('cancel'); ?>
-											</button>				
-											<button type="button" id="button-next-3" class="btn button-next btn-primary altval" 
+											</button>
+											<button type="button" id="button-next-3" class="btn button-next btn-primary altval"
 													data-step_index="3">
 												<?php echo $this->lang->line('next'); ?>
 												<span class="glyphicon glyphicon-forward"></span>
@@ -550,28 +528,28 @@
 									</div>
 								</div>
 							</div>
-							<!-- MANAGE AUTHORIZATION Modification End -->	
+							<!-- MANAGE AUTHORIZATION Modification End -->
 						</div>
                     </div>
-					
+
                     <div class="command-buttons">
                         <button type="button" id="button-back-3" class="btn button-back btn-default"
                                 data-step_index="3"><span class="glyphicon glyphicon-backward"></span>
                             <?php echo $this->lang->line('back'); ?>
                         </button>
-					
+
 					<?php if ($conf_notice == 'yes'): ?>
 						<button id="insert-authorization" class="btn btn-primary" >
 							<?php echo $this->lang->line('next'); ?>
 							<span class="glyphicon glyphicon-forward"></span>
-						</button><br><br>						
-					<?php else : ?>	
+						</button><br><br>
+					<?php else : ?>
                         <button type="button" id="button-next-3" class="btn button-next btn-primary"
                                 data-step_index="3">
                             <?php echo $this->lang->line('next'); ?>
                             <span class="glyphicon glyphicon-forward"></span>
                         </button>
-					<?php endif; ?>	
+					<?php endif; ?>
                     </div>
                 </div>
 
@@ -584,12 +562,12 @@
                     <div class="frame-container">
                         <h3 class="frame-title"><?php echo $this->lang->line('step_four_title'); ?></h3>
                         <div class="frame-content row">
-                            <div 
+                            <div
 							<?php if ($conf_notice == 'yes'): ?>
 								id="appointment-details2"
-							<?php else : ?>	
+							<?php else : ?>
 								id="appointment-details"
-							<?php endif; ?>	
+							<?php endif; ?>
 							class="col-xs-12 col-sm-6">
 						</div>
                             <div id="customer-details" class="col-xs-12 col-sm-6"></div>
@@ -644,7 +622,7 @@
                     |
                     <a href="<?php echo site_url('backend'); ?>">
                         <?php echo $this->session->userdata('user_id')
-                            ? $this->lang->line('backend_section') 
+                            ? $this->lang->line('backend_section')
                             : $this->lang->line('login'); ?>
                     </a>
                 </div>
@@ -674,10 +652,10 @@
 									<strong><?php echo $this->lang->line('cell_carrier'); ?></strong>
 								</label>
 								<select id="cell-carrier2" class="col-md-4 form-control">
-										<option disabled selected> <?php echo $this->lang->line('select'); ?> </option>	 
-										<?php 
+										<option disabled selected> <?php echo $this->lang->line('select'); ?> </option>
+										<?php
 									   foreach($cell_services as $carrier) {
-										echo '<option value="' . $carrier['cellurl'] . '">' 
+										echo '<option value="' . $carrier['cellurl'] . '">'
 													. $carrier['cellco'] . '</option>';
 										}
 									?>
@@ -687,7 +665,7 @@
 								<input type="text" id="phone-number2" class="form-control" maxlength="60" />
 							</div>
 								<br><br>
-						</div>					
+						</div>
 					</div>
 				</div>
 					<div class="modal-footer">
@@ -699,20 +677,20 @@
                         <input type="hidden" name="csrfToken" />
                         <input type="hidden" name="post_waiting" />
                     </form>
-						
+
 						<button id="cancel-waitinglist" class="btn" data-dismiss="modal">
 							<?php echo $this->lang->line('cancel'); ?>
 						</button>
-					</div>				
+					</div>
 					<em id="form-message" class="text-danger"><?php echo $this->lang->line('fields_are_required'); ?></em>
 			</div>
-		</div>								
-	</div>		
-	<!-- MANAGE WAITING LIST Modification End -->	
-	
+		</div>
+	</div>
+	<!-- MANAGE WAITING LIST Modification End -->
 
-		
-	
+
+
+
     <?php
         // ------------------------------------------------------------
         // GLOBAL JAVASCRIPT VARIABLES
@@ -738,7 +716,7 @@
 			confNotice				: <?php echo json_encode($conf_notice); ?>,
 			wpInvoice				: <?php echo json_encode($wp_invoice); ?>,
 			sessionId				: <?php echo json_encode($session_id); ?>,
-			seeAt					: <?php echo json_encode($this->lang->line('wp_invoice_see_at')); ?>			
+			seeAt					: <?php echo json_encode($this->lang->line('wp_invoice_see_at')); ?>
         };
 
         var EALang = <?php echo json_encode($this->lang->language); ?>;
@@ -793,7 +771,7 @@
  <?php
 	if (Config::WP_HEADER_FOOTER== TRUE) {
 		get_footer();
-	}	
-	?> 
+	}
+	?>
 <!-- WP Mod 6 Craig Tucker End -->
 </html>

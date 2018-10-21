@@ -1,0 +1,104 @@
+<?php
+
+
+$datelimite = date ("Y-m-d h:i:s a", mktime(0,0,0,date("m"),date("d")-365,date("Y")));
+
+$conn = mysql_connect('localhost', 'root', 'M@!tre') or die(mysql_error());
+mysql_select_db('easyblue2', $conn) or die(mysql_error($conn));
+
+/*request to have the months*/
+$query = "SELECT `name` AS `MOIS`
+FROM `ea_mois`";
+
+/*request to have the names of services*/
+$queryservicenom = "SELECT `name`
+FROM `ea_services` ";
+
+/*request to have the id of services*/
+$queryserviceid = "SELECT `id` 
+FROM `ea_services` ";
+
+/*request to have the number of appointments by month*/
+$querytotalparmois = "SELECT `ea_mois`.`id`, `ea_mois`.`name`, 
+COUNT( `ea_appointments`.`start_datetime` ) 
+FROM { oj `easyblue2`.`ea_mois` AS `ea_mois` 
+LEFT OUTER JOIN ( SELECT `easyblue2`.`ea_appointments`.* FROM `easyblue2`.`ea_appointments` WHERE  `ea_appointments`.`start_datetime` >= '".$datelimite."') AS `ea_appointments` 
+ON `ea_mois`.`id` = MONTH(`ea_appointments`.`start_datetime`) } 
+GROUP BY `ea_mois`.`id` 
+ORDER BY `ea_mois`.`id` ASC";
+
+
+$result = mysql_query($query, $conn) or die(mysql_error($conn));
+
+$row = mysql_fetch_row($result);
+
+?>
+<div style="display : block;">
+<table id="rendez-vous" style="width: 95%;padding-left: 3px; margin: auto;border:1px solid #1E6A40;">
+ 	<div id="titre" style="font-size: 18px;width: 16%;margin: auto;padding-bottom: 15px;"> Tableau des rendez-vous </div>
+  		<thead>
+	       <?php
+         echo "<th style='padding-left: 5px;border:1px solid #1E6A40;'>".$this->lang->line('services')." </th>";
+         while($row) {
+          echo "<th style='text-align: center;border:1px solid #1E6A40;'>".$this->lang->line($row[0])."</th>" ;
+          $row = mysql_fetch_row($result);
+         }
+          echo "<th style='text-align: center;border:1px solid #1E6A40;'> ".$this->lang->line('total')." </th>" ; ?>
+		</thead>
+  <tbody>
+    <?php
+      $tableautotalparmois = mysql_query($querytotalparmois, $conn) or die(mysql_error($conn));
+    	$tableauservicenom = mysql_query($queryservicenom, $conn) or die(mysql_error($conn));
+    	$tableauserviceid = mysql_query($queryserviceid, $conn) or die(mysql_error($conn));
+    	$rowtotalparmois = mysql_fetch_row($tableautotalparmois);
+    	$rowservicenom = mysql_fetch_row($tableauservicenom);
+    	$rowserviceid = mysql_fetch_row($tableauserviceid);
+    	
+    	while($rowservicenom) {
+    		$total = 0;
+    		echo "<tr>";
+    		echo "<td style='text-align: left;padding-left: 5px;border-right:1px solid #1E6A40;'> $rowservicenom[0] </td>";
+    		
+    		/*request which write the number of appointments by month for each services */
+    		
+    		$querypourservice = "SELECT `ea_mois`.`id`, `ea_mois`.`name`, 
+			COUNT( `ea_appointments`.`start_datetime` ), `ea_services`.`name` 
+			FROM { oj `easyblue2`.`ea_appointments` AS `ea_appointments` 
+			RIGHT OUTER JOIN `easyblue2`.`ea_mois` AS `ea_mois` 
+			ON MONTH(`ea_appointments`.`start_datetime`) = `ea_mois`.`id` AND `ea_appointments`.`id_services` = '$rowserviceid[0]' 
+			LEFT OUTER JOIN `easyblue`.`ea_services` AS `ea_services` 
+			ON `ea_appointments`.`id_services` = `ea_services`.`id` AND `ea_services`.`id`='$rowserviceid[0]'  } 
+			GROUP BY `ea_mois`.`name`, `ea_services`.`name` 
+			ORDER BY `ea_mois`.`id` ASC";
+
+    		$resultatrequete = mysql_query($querypourservice, $conn) or die(mysql_error($conn));
+    		$row = mysql_fetch_row($resultatrequete);
+    		
+    		while($row) {
+      		$total = $total + $row[2];
+      		echo "<td style='text-align: center;border-left:1px solid #1E6A40;border-right:1px solid #1E6A40;'> $row[2]</td>" ;
+      		$row = mysql_fetch_row($resultatrequete);
+    		}
+    		echo "<td style='text-align: center;border-left:1px solid #1E6A40;'> $total </td>";
+    		$rowservicenom = mysql_fetch_row($tableauservicenom);
+			$rowserviceid = mysql_fetch_row($tableauserviceid);
+			echo "</tr>";
+		}
+			$total2 = 0;
+		  	echo "<tr>";
+		  	echo "<td style='padding-left: 5px;border:1px solid #1E6A40;'> Total </td>";
+	      while($rowtotalparmois) {
+          echo "<td style='text-align: center;border:1px solid #1E6A40;'> $rowtotalparmois[2]</td>" ;
+          $total2 = $total2 + $rowtotalparmois[2];
+          $rowtotalparmois = mysql_fetch_row($tableautotalparmois);
+         }
+          echo "<td style='text-align: center;border:1px solid #1E6A40;'> $total2 </td>" ; ?>
+		</thead>		
+  </tbody>
+  </table>
+  </div>
+  <div style="margin-left:47.5%;padding-top: 5px;">
+	<a href="<?php echo site_url('backend/exporter'); ?>" class="menu-item">                      
+                        <?php echo "EXPORTER"; ?>
+                    </a>
+                    </div>
